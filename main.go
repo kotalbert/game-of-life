@@ -57,8 +57,18 @@ func (g Game) NextGeneration() *Game {
 }
 
 func (g Game) countNeighbors(i int, j int) int {
-	// todo: implement
-	return i + j
+
+	neighbours := []bool{
+		g.cells[i-1][j-1], g.cells[i-1][j], g.cells[i-1][j+1],
+		g.cells[i][j-1], g.cells[i][j+1],
+		g.cells[i+1][j-1], g.cells[i+1][j], g.cells[i+1][j+1]}
+	var n int
+	for _, v := range neighbours {
+		if v {
+			n++
+		}
+	}
+	return n
 }
 
 func NewGame(seed int, n int, generations int) *Game {
