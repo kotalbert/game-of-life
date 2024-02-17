@@ -56,12 +56,33 @@ func (g Game) NextGeneration() *Game {
 	return &g
 }
 
+func maxIndex(a int, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func minIndex(a int, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+
+}
+
 func (g Game) countNeighbors(i int, j int) int {
 
+	// wrap around the edges
+	iMinus := maxIndex(i-1, g.n-1)
+	jMinus := maxIndex(j-1, g.n-1)
+	iPlus := minIndex(j+1, g.n-1)
+	jPlus := minIndex(i+1, g.n-1)
+
 	neighbours := []bool{
-		g.cells[i-1][j-1], g.cells[i-1][j], g.cells[i-1][j+1],
-		g.cells[i][j-1], g.cells[i][j+1],
-		g.cells[i+1][j-1], g.cells[i+1][j], g.cells[i+1][j+1]}
+		g.cells[iMinus][jMinus], g.cells[iMinus][j], g.cells[iMinus][iPlus],
+		g.cells[i][jMinus], g.cells[i][iPlus],
+		g.cells[jPlus][jMinus], g.cells[jPlus][j], g.cells[jPlus][iPlus]}
 	var n int
 	for _, v := range neighbours {
 		if v {
