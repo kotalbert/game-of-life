@@ -56,30 +56,15 @@ func (g Game) NextGeneration() *Game {
 	return &g
 }
 
-func maxIndex(a int, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func minIndex(a int, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-
-}
-
 func (g Game) countNeighbors(i int, j int) int {
 
-	// wrap around the edges
-	nw := g.cells[maxIndex(i-1, g.n-1)][maxIndex(j-1, g.n-1)]
-	no := g.cells[maxIndex(i-1, g.n-1)][j]
-	ne := g.cells[maxIndex(i-1, g.n-1)][(j+1)%g.n]
-	we := g.cells[i][maxIndex(j-1, g.n-1)]
+	// wrap around the edges, flip to the other side if out of bounds
+	nw := g.cells[(i-1+g.n)%g.n][(j-1+g.n)%g.n]
+	no := g.cells[(i-1+g.n)%g.n][j]
+	ne := g.cells[(i-1+g.n)%g.n][(j+1)%g.n]
+	we := g.cells[i][(j-1+g.n)%g.n]
 	ea := g.cells[i][(j+1)%g.n]
-	sw := g.cells[(i+1)%g.n][maxIndex(j-1, g.n-1)]
+	sw := g.cells[(i+1)%g.n][(j-1+g.n)%g.n]
 	so := g.cells[(i+1)%g.n][j]
 	se := g.cells[(i+1)%g.n][(j+1)%g.n]
 
@@ -139,7 +124,7 @@ func main() {
 	generations := readInt()
 	game := NewGame(seed, n, generations)
 
-	for i := 0; i <= game.generations; i++ {
+	for i := 1; i <= game.generations; i++ {
 		game = game.NextGeneration()
 	}
 	fmt.Println(game.ToString())
