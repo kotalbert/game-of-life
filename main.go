@@ -14,7 +14,7 @@ type Game struct {
 	cells       [][]bool
 }
 
-func (g Game) ToString() any {
+func (g Game) ToString() string {
 
 	var bld strings.Builder
 	for i := 0; i < g.n; i++ {
@@ -74,15 +74,20 @@ func minIndex(a int, b int) int {
 func (g Game) countNeighbors(i int, j int) int {
 
 	// wrap around the edges
-	iMinus := maxIndex(i-1, g.n-1)
-	jMinus := maxIndex(j-1, g.n-1)
-	iPlus := minIndex(j+1, g.n-1)
-	jPlus := minIndex(i+1, g.n-1)
+	nw := g.cells[maxIndex(i-1, g.n-1)][maxIndex(j-1, g.n-1)]
+	no := g.cells[maxIndex(i-1, g.n-1)][j]
+	ne := g.cells[maxIndex(i-1, g.n-1)][(j+1)%g.n]
+	we := g.cells[i][maxIndex(j-1, g.n-1)]
+	ea := g.cells[i][(j+1)%g.n]
+	sw := g.cells[(i+1)%g.n][maxIndex(j-1, g.n-1)]
+	so := g.cells[(i+1)%g.n][j]
+	se := g.cells[(i+1)%g.n][(j+1)%g.n]
 
 	neighbours := []bool{
-		g.cells[iMinus][jMinus], g.cells[iMinus][j], g.cells[iMinus][iPlus],
-		g.cells[i][jMinus], g.cells[i][iPlus],
-		g.cells[jPlus][jMinus], g.cells[jPlus][j], g.cells[jPlus][iPlus]}
+		nw, no, ne,
+		we, ea,
+		sw, so, se,
+	}
 	var n int
 	for _, v := range neighbours {
 		if v {
@@ -134,11 +139,10 @@ func main() {
 	generations := readInt()
 	game := NewGame(seed, n, generations)
 
-	for i := 0; i < game.generations; i++ {
-		fmt.Println(game.ToString())
+	for i := 0; i <= game.generations; i++ {
 		game = game.NextGeneration()
-
 	}
+	fmt.Println(game.ToString())
 
 }
 
