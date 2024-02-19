@@ -8,7 +8,6 @@ import (
 )
 
 type Game struct {
-	seed        int
 	n           int
 	generations int
 	cells       [][]bool
@@ -84,9 +83,7 @@ func (g Game) countNeighbors(i int, j int) int {
 
 func NewGame(seed int, n int, generations int) *Game {
 
-	game := &Game{seed: seed, n: n, generations: generations}
-
-	rand.Seed(int64(seed))
+	game := &Game{n: n, generations: generations}
 
 	game.cells = make([][]bool, n)
 
