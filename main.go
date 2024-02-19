@@ -8,9 +8,8 @@ import (
 )
 
 type Game struct {
-	n           int
-	generations int
-	cells       [][]bool
+	n     int
+	cells [][]bool
 }
 
 func (g Game) ToString() string {
@@ -28,6 +27,18 @@ func (g Game) ToString() string {
 	}
 	return bld.String()
 
+}
+
+func (g Game) getNumberOfAliveCells() int {
+	var alive int
+	for i := 0; i < g.n; i++ {
+		for j := 0; j < g.n; j++ {
+			if g.cells[i][j] {
+				alive++
+			}
+		}
+	}
+	return alive
 }
 
 // NextGeneration creates a new generation of cells
@@ -81,9 +92,9 @@ func (g Game) countNeighbors(i int, j int) int {
 	return n
 }
 
-func NewGame(seed int, n int, generations int) *Game {
+func NewGame(n int) *Game {
 
-	game := &Game{n: n, generations: generations}
+	game := &Game{n: n}
 
 	game.cells = make([][]bool, n)
 
@@ -117,14 +128,13 @@ func initializeUniverse(n int, game *Game) {
 func main() {
 
 	n := readInt()
-	seed := readInt()
-	generations := readInt()
-	game := NewGame(seed, n, generations)
+	game := NewGame(n)
 
-	for i := 1; i <= game.generations; i++ {
+	for i := 1; i <= 10; i++ {
 		game = game.NextGeneration()
+		fmt.Printf("Generation #%d\nAlive: %d\n", i, game.getNumberOfAliveCells())
+		fmt.Println(game.ToString())
 	}
-	fmt.Println(game.ToString())
 
 }
 
